@@ -1,4 +1,4 @@
-from dispachante import dispachante_init
+from dispachante import despachante_init
 import sys
 
 # Le os argumentos em linha de comando, se tiverem sido utilizados.
@@ -11,4 +11,4 @@ else:
 	caminho_arq = input("Informe o caminho completo para o arquivo TXT de arquivos:")	
 
 # Executa o modulo do Despachante
-dispachante_init(caminho_proc, caminho_arq)
+despachante_init(caminho_proc, caminho_arq)

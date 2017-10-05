@@ -1,30 +1,33 @@
-# Class principal de definicao dos processos
-class Processo:
-	
-	def __init__(self, pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco):
-		self.pid     	= pid 
-		self.tempo_init = tempo_init
-		self.prioridade = prioridade
-		self.tempo_cpu  = tempo_cpu
-		# self.offset     = offset # esse valor a gente vai ter que calcular a partir do gerenciador de arquivos eu acho
-		self.quant_mem  = quant_mem
-		self.impressora = impressora
-		self.scanner    = scanner
-		self.modem      = modem
-		self.disco      = disco
+###################
+# Modulo de Filas #
+###################
 
+from processo import Processo
+import time
 
-def dispachante_init(caminho_proc, caminho_arq):
+# Fila geral de processos
+processos = []
+# Fila de processos de tempo real
+processos_real = []
+# Fila de processos de usuario
+processos_usuario = []
+
+# Inicializa a execucao do SO
+def despachante_init(caminho_proc, caminho_arq):
 
 	# Lista representacao de processos no formato da entrada
 	strings_proc = []
-	# Lista de processos
-	processos = []
 
 	le_arquivo(caminho_proc, strings_proc)
-	prepara_procs(strings_proc, processos)
-	imprime_processos(processos)
+	prepara_proc_geral(strings_proc)
+	separa_procs()
+	
+	for proc in processos:
+		imprime_processo(proc)
+		executa_processo(proc)  # essa funcao eh soh um placebo pra entender como vai ser a execucao, dps tem que alterar
 
+# Le um arquivo texto e salva em uma lista de strings
+# onde cada string eh referente a uma linha do arquivo
 def le_arquivo(caminho, strings_proc):
 	
 	try:
@@ -38,7 +41,9 @@ def le_arquivo(caminho, strings_proc):
 	except FileNotFoundError:
 		print("!! Arquivo nao encontrado !!")
 
-def prepara_procs(strings_proc, processos):
+# Popula a fila geral de processos com objetos do classe
+# Processo atraves dos dados lidos do arquivo txt
+def prepara_proc_geral(strings_proc):
 	# Lista de interios convertidos a partir das strings
 	int_list = []
 	# Contador de IDs dos processos
@@ -58,15 +63,37 @@ def prepara_procs(strings_proc, processos):
 		processos.append(proc)
 		pid += 1
 
-def imprime_processos(processos):
-
+# Separa os processos por tipo e coloca nas filas adequadas
+def separa_procs():
 	for proc in processos:
-		print("\n")
-		print("PID:        " + str(proc.pid))
-		print("prioridade: " + str(proc.prioridade))
-		# print("offset:   " + str(proc.offset))
-		print("blocos:     " + str(proc.quant_mem))
-		print("impressora: " + str(proc.impressora))
-		print("scanner:    " + str(proc.scanner))
-		print("modem:      " + str(proc.modem))
-		print("disco:      " + str(proc.disco))
+		if(proc.prioridade == 0):
+			processos_real.append(proc)
+		else:
+			processos_usuario.append(proc)
+
+def executa_processo(proc):
+
+	print("Processo " + str(proc.pid) + "=>")
+	print("    P" + str(proc.pid) + " STARTED")
+	
+	for i in range(0, proc.tempo_cpu):
+		print("    P" + str(proc.pid) + " instrucao " + str(i+1))
+		time.sleep(1)
+	
+	print("    P" + str(proc.pid) + " return SIGINT")
+	time.sleep(1)
+	print("\n")
+
+# Imprime os dados de cada processo executado pelo dispachante
+def imprime_processo(proc):
+
+	print("Dispachante =>")
+	print("    PID:        " + str(proc.pid))
+	print("    prioridade: " + str(proc.prioridade))
+	# print("    offset:   " + str(proc.offset))
+	print("    blocos:     " + str(proc.quant_mem))
+	print("    impressora: " + str(proc.impressora))
+	print("    scanner:    " + str(proc.scanner))
+	print("    modem:      " + str(proc.modem))
+	print("    disco:      " + str(proc.disco))
+	print("\n")
