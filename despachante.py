@@ -20,11 +20,9 @@ def despachante_init(caminho_proc, caminho_arq):
 
 	le_arquivo(caminho_proc, strings_proc)
 	prepara_proc_geral(strings_proc)
-	separa_procs()
 	
 	for proc in processos:
-		imprime_processo(proc)
-		executa_processo(proc)  # essa funcao eh soh um placebo pra entender como vai ser a execucao, dps tem que alterar
+		escalonador(proc)
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
@@ -63,13 +61,16 @@ def prepara_proc_geral(strings_proc):
 		processos.append(proc)
 		pid += 1
 
-# Separa os processos por tipo e coloca nas filas adequadas
-def separa_procs():
-	for proc in processos:
-		if(proc.prioridade == 0):
-			processos_real.append(proc)
-		else:
-			processos_usuario.append(proc)
+	processos.sort(key=lambda x: x.tempo_init) # Ordena os processos por ordem de chegada
+
+
+def escalonador(proc):
+	if proc.prioridade == 0:
+		imprime_processo(proc)
+		executa_processo(proc)
+	else:
+		
+
 
 def executa_processo(proc):
 

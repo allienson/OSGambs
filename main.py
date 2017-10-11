@@ -1,4 +1,4 @@
-from dispachante import despachante_init
+from despachante import despachante_init
 import sys
 
 # Le os argumentos em linha de comando, se tiverem sido utilizados.
