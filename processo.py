@@ -5,6 +5,8 @@
 # Class principal de definicao dos processos
 class Processo:
 	
+	tempo_decorrido = 0
+
 	def __init__(self, pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco):
 		self.pid     	= pid 
 		self.tempo_init = tempo_init
@@ -16,3 +18,5 @@ class Processo:
 		self.scanner    = scanner
 		self.modem      = modem
 		self.disco      = disco
+
+
