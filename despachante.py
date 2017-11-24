@@ -3,17 +3,20 @@
 ###################
 
 from processo import Processo
+from filas import Filas
 import time
 
 
 # Fila geral de processos
 processos = []
 # Fila de processos de tempo real
-processos_real = []
+# processos_real = []
 # Fila de processos de usuario
-processos_usuario1 = []
-processos_usuario2 = []
-processos_usuario3 = []
+# processos_usuario1 = []
+# processos_usuario2 = []
+# processos_usuario3 = []
+
+filas = Filas()
 
 tempo = 0
 
@@ -68,23 +71,14 @@ def prepara_filas_proc(caminho):
         proc = Processo(pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco)
         pid += 1
 
-        if (prioridade == 0):
-            processos_real.append(proc)
-        elif (prioridade == 1):
-            processos_usuario1.append(proc)
-        elif (prioridade == 2):
-            processos_usuario2.append(proc)
-        elif (prioridade == 3):
-            processos_usuario3.append(proc)
-        else:
-            print("Prioridade inválida")
-            exit(0)
+        processos.append(proc)
 
-    processos_real.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
-    processos_usuario1.sort(key=lambda x: x.tempo_init)
-    processos_usuario2.sort(key=lambda x: x.tempo_init)
-    processos_usuario3.sort(key=lambda x: x.tempo_init)
-    print(processos_real)
+    processos.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
+    # processos_real.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
+    #             processos_usuario1.sort(key=lambda x: x.tempo_init)
+    #             processos_usuario2.sort(key=lambda x: x.tempo_init)
+    #             processos_usuario3.sort(key=lambda x: x.tempo_init)
+    #             print(processos_real)
 
 #def escalonador(proc):
     # if proc.prioridade == 0:
@@ -97,6 +91,20 @@ def prepara_filas_proc(caminho):
 
 def executa_processos():
     global tempo
+
+    processos_que_vao_entrar = []
+    flag = True
+    for processo in processos:
+        if processo.tempo_init == tempo:
+            #Verificar memoria
+
+            #adicionar processo na fila
+            print("Cheguei aqui")
+            #filas.adicionar_processo_na_fila(processo)
+            processos_que_vao_entrar.append(processo)
+
+
+
 
     while ((len(processos_real) != 0) or (len(processos_usuario1) != 0) or (len(processos_usuario2) != 0) or (len(processos_usuario3) != 0)):
         print(tempo)
