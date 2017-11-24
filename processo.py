@@ -7,7 +7,7 @@ class Processo:
 	
 	tempo_decorrido = 0
 
-	def __init__(self, pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco):
+	def __init__(self, pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, sata):
 		self.pid     	= pid 
 		self.tempo_init = tempo_init
 		self.prioridade = prioridade
@@ -17,7 +17,7 @@ class Processo:
 		self.impressora = impressora
 		self.scanner    = scanner
 		self.modem      = modem
-		self.disco      = disco
+		self.sata      = sata
 		self.inicio_memoria = 0
 
 	def final_memoria(self):

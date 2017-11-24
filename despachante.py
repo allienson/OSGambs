@@ -5,6 +5,7 @@
 from processo import Processo
 import time
 from memoria import Memoria
+from entrada_saida import Entrada_Saida
 
 
 # Fila geral de processos
@@ -17,6 +18,7 @@ processos_usuario2 = []
 processos_usuario3 = []
 
 memoria = Memoria()
+recurso = Entrada_Saida()
 
 tempo = 0
 
@@ -93,9 +95,9 @@ def prepara_fila_proc(caminho):
         impressora = int(int_list[4])
         scanner = int(int_list[5])
         modem = int(int_list[6])
-        disco = int(int_list[7])
+        sata = int(int_list[7])
 
-        proc = Processo(pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco)
+        proc = Processo(pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, sata)
         pid += 1
         processos.append(proc)
         processos.sort(key=lambda x: x.tempo_init)
@@ -107,7 +109,7 @@ def executa_processos():
 
     if ((len(processos_real) != 0)):
         executa_real(processos_real[0])
-    elif ((len(processos_usuario1) != 0)):
+    elif ((len(processos_usuario1) != 0) and recurso.alocar_recurso(processos_usuario1[0])):
         executa_usuario(processos_usuario1[0], processos_usuario1)
     elif ((len(processos_usuario2) != 0) ):
         executa_usuario(processos_usuario2[0], processos_usuario2)
@@ -123,9 +125,8 @@ def executa_real(proc):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
         time.sleep(1)
     memoria.libera_memoria_real(proc)
-    processos_real.pop(0)
     tempo += proc.tempo_cpu
-
+    processos_real.pop(0)
 
 def executa_usuario(proc, fila):
     global tempo
