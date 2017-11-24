@@ -18,5 +18,9 @@ class Processo:
 		self.scanner    = scanner
 		self.modem      = modem
 		self.disco      = disco
+		self.inicio_memoria = 0
+
+	def final_memoria(self):
+		return self.inicio_memoria + self.quant_mem 
 
 

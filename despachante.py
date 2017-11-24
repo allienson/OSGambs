@@ -4,6 +4,7 @@
 
 from processo import Processo
 import time
+from memoria import Memoria
 
 
 # Fila geral de processos
@@ -15,6 +16,8 @@ processos_usuario1 = []
 processos_usuario2 = []
 processos_usuario3 = []
 
+memoria = Memoria()
+
 tempo = 0
 
 
@@ -24,29 +27,56 @@ def despachante_init(caminho_proc, caminho_arq):
     strings_proc = []
 
     #le_arquivo(, strings_proc)
-    prepara_filas_proc(caminho_proc)
-
+    prepara_fila_proc(caminho_proc)
+    loop_controle()
     executa_processos()
 
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
-def le_arquivo(caminho, strings_proc):
-    try:
-        fp = open(caminho, 'r')
+def loop_controle():
+    
+    #for i in range(0,len(processos)):
+    while ((len(processos_real) != 0) or (len(processos) >0) or (len(processos_usuario1) >0) or (len(processos_usuario2) >0) or (len(processos_usuario3) >0)):
+        
+        if((len(processos) > 0)):
+            while ((processos[0].tempo_init <= tempo)):
+                if(memoria.memoria_disponivel(processos[0])):
+                    adiciona_em_fila(processos.pop(0))
+                else:
+                    processos.pop(0)
 
-        for line in fp:
-            linha = line.replace('\n', '')
-            strings_proc.append(linha)
+                if(len(processos) == 0): break
 
-        fp.close()
-    except FileNotFoundError:
-        print("!! Arquivo nao encontrado !!")
+        executa_processos()
+    #print(memoria.memoria_real)
+
+#def memoria_disponivel():
+#    return True
+
+def adiciona_em_fila(proc):
+
+    if (proc.prioridade == 0):
+        processos_real.append(proc)
+    elif (proc.prioridade == 1):
+        processos_usuario1.append(proc)
+    elif (proc.prioridade == 2):
+        processos_usuario2.append(proc)
+    elif (proc.prioridade == 3):
+        processos_usuario3.append(proc)
+    else:
+        print("Prioridade inválida")
+        exit(0)
+
+    processos_real.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
+    processos_usuario1.sort(key=lambda x: x.tempo_init)
+    processos_usuario2.sort(key=lambda x: x.tempo_init)
+    processos_usuario3.sort(key=lambda x: x.tempo_init)
 
 
 # Popula a fila geral de processos com objetos do classe
 # Processo atraves dos dados lidos do arquivo txt
-def prepara_filas_proc(caminho):
+def prepara_fila_proc(caminho):
 
     fh = open(caminho, 'r')    
     # Contador de IDs dos processos
@@ -67,50 +97,24 @@ def prepara_filas_proc(caminho):
 
         proc = Processo(pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, disco)
         pid += 1
-
-        if (prioridade == 0):
-            processos_real.append(proc)
-        elif (prioridade == 1):
-            processos_usuario1.append(proc)
-        elif (prioridade == 2):
-            processos_usuario2.append(proc)
-        elif (prioridade == 3):
-            processos_usuario3.append(proc)
-        else:
-            print("Prioridade inválida")
-            exit(0)
-
-    processos_real.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
-    processos_usuario1.sort(key=lambda x: x.tempo_init)
-    processos_usuario2.sort(key=lambda x: x.tempo_init)
-    processos_usuario3.sort(key=lambda x: x.tempo_init)
-    print(processos_real)
-
-#def escalonador(proc):
-    # if proc.prioridade == 0:
- #   imprime_processo(proc)
-  #  executa_processo(proc)
-    # else:
-
-#    processos_real.pop()
+        processos.append(proc)
+        processos.sort(key=lambda x: x.tempo_init)
 
 
 def executa_processos():
     global tempo
 
-    while ((len(processos_real) != 0) or (len(processos_usuario1) != 0) or (len(processos_usuario2) != 0) or (len(processos_usuario3) != 0)):
-        print(tempo)
 
-        if ((len(processos_real) != 0) and (processos_real[0].tempo_init <= tempo)):
-            executa_real(processos_real[0])
-        elif ((len(processos_usuario1) != 0) and (processos_usuario1[0].tempo_init <= tempo)):
-            executa_usuario(processos_usuario1[0], processos_usuario1)
-        elif ((len(processos_usuario2) != 0) and (processos_usuario2[0].tempo_init <= tempo)):
-            executa_usuario(processos_usuario2[0], processos_usuario2)
-        elif ((len(processos_usuario3) != 0) and (processos_usuario3[0].tempo_init <= tempo)):
-            executa_usuario(processos_usuario3[0], processos_usuario3)
-        else:
-            tempo += 1
+    if ((len(processos_real) != 0)):
+        executa_real(processos_real[0])
+    elif ((len(processos_usuario1) != 0)):
+        executa_usuario(processos_usuario1[0], processos_usuario1)
+    elif ((len(processos_usuario2) != 0) ):
+        executa_usuario(processos_usuario2[0], processos_usuario2)
+    elif ((len(processos_usuario3) != 0)):
+        executa_usuario(processos_usuario3[0], processos_usuario3)
+    else:
+        tempo += 1
 
 
 def executa_real(proc):
@@ -118,7 +122,7 @@ def executa_real(proc):
     for i in range(0, proc.tempo_cpu):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
         time.sleep(1)
-
+    memoria.libera_memoria_real(proc)
     processos_real.pop(0)
     tempo += proc.tempo_cpu
 
@@ -133,6 +137,7 @@ def executa_usuario(proc, fila):
     time.sleep(1)
 
     if (proc.tempo_cpu == 0):
+        memoria.libera_memoria_usuario(proc)
         fila.pop(0)
 
 
