@@ -6,6 +6,7 @@ from processo import Processo
 import time
 from memoria import Memoria
 from entrada_saida import Entrada_Saida
+from disco import Disco
 
 
 # Fila geral de processos
@@ -19,6 +20,7 @@ processos_usuario3 = []
 
 memoria = Memoria()
 recurso = Entrada_Saida()
+disco   = Disco()
 
 tempo = 0
 
@@ -29,10 +31,15 @@ def despachante_init(caminho_proc, caminho_arq):
     strings_proc = []
 
     #le_arquivo(, strings_proc)
-    prepara_fila_proc(caminho_proc)
-    loop_controle()
-    executa_processos()
+    #prepara_fila_proc(caminho_proc)
+    #loop_controle()
+    #executa_processos()
 
+    # TODO 
+    # Incluir isso aqui no meio da execução dos processos
+    le_arqs(caminho_arq)
+    disco.prepara_disco()
+    disco.executa_operacoes()
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
@@ -102,10 +109,8 @@ def prepara_fila_proc(caminho):
         processos.append(proc)
         processos.sort(key=lambda x: x.tempo_init)
 
-
 def executa_processos():
     global tempo
-
 
     if ((len(processos_real) != 0)):
         executa_real(processos_real[0])
@@ -117,7 +122,6 @@ def executa_processos():
         executa_usuario(processos_usuario3[0], processos_usuario3)
     else:
         tempo += 1
-
 
 def executa_real(proc):
     global tempo
@@ -140,6 +144,26 @@ def executa_usuario(proc, fila):
     if (proc.tempo_cpu == 0):
         memoria.libera_memoria_usuario(proc)
         fila.pop(0)
+
+def le_arqs(caminho):
+
+    fh = open(caminho, 'r')    
+    
+    tamanho = int(fh.readline())
+    seg_ocup = int(fh.readline())
+    disco.inicializa_disco(tamanho, seg_ocup)    
+
+    for i in range(2, seg_ocup+2):
+        linha = fh.readline()
+        disco.add_arquivo(linha)
+    
+    for linha in fh:
+        disco.add_operacao(linha)
+
+
+
+#def executa_gerenciador_arqs(caminho_arq):
+
 
 
 # Imprime os dados de cada processo executado pelo dispachante
