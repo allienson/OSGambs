@@ -65,9 +65,13 @@ def escalonar():
     #testa a fila de prioridade 1
     for i in range(0,len(fila.processos_usuario1)):
         if(fila.processos_usuario1[i].tempo_decorrido == 0):
-            if(memoria.memoria_disponivel(fila.processos_usuario1[i])):
-                executa_usuario(fila.processos_usuario1[i],fila.processos_usuario1,i)
-                return
+            if (recurso.recursos_estao_disponiveis(fila.processos_usuario1[i])):
+                if(memoria.memoria_disponivel(fila.processos_usuario1[i])):
+                
+
+                    recurso.alocar_recurso(fila.processos_usuario1[i])
+                    executa_usuario(fila.processos_usuario1[i],fila.processos_usuario1,i)
+                    return
         else:
             executa_usuario(fila.processos_usuario1[i],fila.processos_usuario1,i)
             return
@@ -75,9 +79,12 @@ def escalonar():
     #testa a fila de prioridade 2
     for i in range(0,len(fila.processos_usuario2)):
         if(fila.processos_usuario2[i].tempo_decorrido == 0):
-            if(memoria.memoria_disponivel(fila.processos_usuario2[i])):
-                executa_usuario(fila.processos_usuario2[i],fila.processos_usuario2,i)
-                return
+            if (recurso.recursos_estao_disponiveis(fila.processos_usuario2[i])):
+                if(memoria.memoria_disponivel(fila.processos_usuario2[i])):
+
+                    recurso.alocar_recurso(fila.processos_usuario2[i])
+                    executa_usuario(fila.processos_usuario2[i],fila.processos_usuario2,i)
+                    return
         else:
             executa_usuario(fila.processos_usuario2[i],fila.processos_usuario2,i)
             return
@@ -85,9 +92,12 @@ def escalonar():
     #testa a fila de prioridade 3
     for i in range(0,len(fila.processos_usuario3)):
         if(fila.processos_usuario3[i].tempo_decorrido == 0):
-            if(memoria.memoria_disponivel(fila.processos_usuario3[i])):
-                executa_usuario(fila.processos_usuario3[i],fila.processos_usuario3,i)
-                return
+            if (recurso.recursos_estao_disponiveis(fila.processos_usuario3[i])):
+                if(memoria.memoria_disponivel(fila.processos_usuario3[i])):
+
+                    recurso.alocar_recurso(fila.processos_usuario3[i])
+                    executa_usuario(fila.processos_usuario3[i],fila.processos_usuario3,i)
+                    return
         else:
             executa_usuario(fila.processos_usuario3[i],fila.processos_usuario3,i)
             return
@@ -98,7 +108,7 @@ def executa_real(proc):
     global tempo
     for i in range(0, proc.tempo_cpu):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
-        #time.sleep(1)
+
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
 
@@ -108,11 +118,16 @@ def executa_usuario(proc, fila,pos):
     proc.tempo_decorrido += 1
 
     print("    P" + str(proc.pid) + " instrucao " + str(proc.tempo_decorrido))
-    #time.sleep(1)
+
 
     if (proc.tempo_cpu == proc.tempo_decorrido):
+        recurso.liberar_recurso(proc)
         memoria.libera_memoria_usuario(proc)
         fila.pop(pos)
+        return
+
+    fila.append(fila.pop(pos))
+
         
 # Imprime os dados de cada processo executado pelo dispachante
 # def imprime_processo(proc):

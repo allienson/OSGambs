@@ -33,16 +33,14 @@ class Entrada_Saida:
 		return False
 
 	def alocar_recurso(self,processo):
-		if(self.recursos_estao_disponiveis(processo)):
-			if(processo.scanner == 1):
-				self.scanner = False
-			if(processo.modem == 1):
-				self.modem = False
-			self.alocar_sata(processo)
-			self.alocar_impressora(processo)
-			return True
-		else:
-			return False
+		if(processo.scanner == 1):
+			self.scanner = False
+		if(processo.modem == 1):
+			self.modem = False
+		self.alocar_sata(processo)
+		self.alocar_impressora(processo)
+		return True
+
 
 	def alocar_sata(self,processo):
 		if(processo.sata == 1):
@@ -55,4 +53,31 @@ class Entrada_Saida:
 			self.impressora1 = False
 		elif(processo.impressora == 2):
 			self.impressora2 = False
+
+
+
+
+
+
+	def liberar_recurso(self,processo):
+		if(processo.scanner == 1):
+			self.scanner = True
+		if(processo.modem == 1):
+			self.modem = True
+		self.liberar_sata(processo)
+		self.liberar_impressora(processo)
+		return True
+
+
+	def liberar_sata(self,processo):
+		if(processo.sata == 1):
+			self.sata1 = True
+		elif(processo.sata == 2):
+			self.sata2 = True
+
+	def liberar_impressora(self,processo):
+		if(processo.impressora == 1):
+			self.impressora1 = True
+		elif(processo.impressora == 2):
+			self.impressora2 = True
 
