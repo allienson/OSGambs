@@ -58,6 +58,8 @@ class Disco:
         elif(codigo == 0):    
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == '0'):
+                    if(count == 0):
+                        pos = i
                     count += 1
                 else:
                     count = 0
@@ -87,7 +89,7 @@ class Disco:
                 blocos_usados = []
                 for i in range(0, num_blocos):
                     blocos_usados = pos+i
-                print("O processo " + str(pid) + " criou o arquivo " + nome + str(blocos_usados) + ".\n")
+                print("O processo " + str(pid) + " criou o arquivo " + nome + ".\n")
             if(codigo == 1):
                 print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")   
         else:
