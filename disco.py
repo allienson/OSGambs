@@ -73,6 +73,8 @@ class Disco:
                     for j in range(pos, i+1):
                         self.blocos[j] = nome
                     proc = [proc for proc in processos if proc.pid == pid]
+                    print(proc)
+                    exit(0)
                     proc[0].arq_criados.append(nome)
                     self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
                     return

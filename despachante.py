@@ -56,13 +56,13 @@ def escalonar():
     global tempo
 
     if (fila.existe_processo_real()):
-        for i in range(0,len(fila.processos_real)):
-            if(fila.processos_real[i].tempo_decorrido == 0):
-                if(memoria.memoria_disponivel(fila.processos_real[i])):
-                    executa_real(fila.processos_real[i],i)
-            else:
-                executa_real(fila.processos_real[i],i)
-
+        # for i in range(0,len(fila.processos_real)):
+        #     if(fila.processos_real[i].tempo_decorrido == 0):
+        #         if(memoria.memoria_disponivel(fila.processos_real[i])):
+        #             executa_real(fila.processos_real[i],i)
+        #     else:
+        #         executa_real(fila.processos_real[i],i)
+        executa_real(fila.processos_real[0],0)
     elif (fila.existe_processo_1()):
         executa_usuario(fila.processos_usuario1[0], fila.processos_usuario1)
     elif (fila.existe_processo_2()):
