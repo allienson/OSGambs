@@ -57,7 +57,7 @@ class Disco:
     def operacao(self, pid, codigo, nome, num_blocos, op_id, processos):
         count = 0
         pos = 0
-        
+
         if(any(proc.pid == pid for proc in processos) == False):
             self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=2)
         elif(codigo == 0):    
@@ -72,10 +72,9 @@ class Disco:
                     pos = i - num_blocos + 1
                     for j in range(pos, i+1):
                         self.blocos[j] = nome
-                    proc = [proc for proc in processos if proc.pid == pid]
-                    print(proc)
-                    exit(0)
-                    proc[0].arq_criados.append(nome)
+                    for k in range(0, len(processos)): 
+                        if processos[k].pid == pid-1:
+                            processos[k].arq_criados.append(nome)                    
                     self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
                     return
                 
@@ -97,8 +96,8 @@ class Disco:
                 for i in range(0, len(self.blocos)):
                     if(self.blocos[i] == nome):    
                         self.blocos[i] = '0'
-                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
-                    return
+                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                return
 
     def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, sucesso):
         if(sucesso == 0):
