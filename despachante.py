@@ -25,16 +25,16 @@ tempo = 0
 def despachante_init(caminho_proc, caminho_arq):
     # Lista representacao de processos no formato da entrada
     # strings_proc = []
-    preencher_processos(caminho_proc)
-    loop_controle()
+    #preencher_processos(caminho_proc)
+    #loop_controle()
 
-    le_procs(caminho_proc)
+    preencher_processos(caminho_proc)
     le_arqs(caminho_arq)
     #loop_controle()
     #executa_processos()
 
     disco.prepara_disco()
-    disco.executa_operacoes()
+    disco.executa_operacoes(processos)
     disco.imprime_disco()
 
 # Le um arquivo texto e salva em uma lista de strings

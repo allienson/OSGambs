@@ -35,7 +35,7 @@ class Disco:
         for i in range(0, quant_blocos):
             self.blocos[i+inicial] = nome
 
-    def executa_operacoes(self):
+    def executa_operacoes(self, processos):
         op_id = 0
 
         for op in self.operacoes:
@@ -47,14 +47,15 @@ class Disco:
                 num_blocos = int(op[3])
             else:
                 num_blocos = 0
-            self.operacao(pid, codigo, nome, num_blocos, op_id)
+            self.operacao(pid, codigo, nome, num_blocos, op_id, processos)
                 
-
-    def operacao(self, pid, codigo, nome, num_blocos, op_id):
+    def operacao(self, pid, codigo, nome, num_blocos, op_id, processos):
         count = 0
         pos = 0
         
-        if(codigo == 0):    
+        if(any(proc.pid == pid for proc in processos)):
+            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=2)
+        elif(codigo == 0):    
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == '0'):
                     if(count == 0):
@@ -78,7 +79,7 @@ class Disco:
         if(sucesso == 0):
             print("Operacao " + str(op_id) + "=> Falha")
             print("O processo " + str(pid) + " nao pode criar o arquivo " + nome + " (falta de espcaco).\n")
-        else:
+        elif(sucesso == 1):
             print("Operacao " + str(op_id) + "=> Sucesso")
             if(codigo == 0):
                 blocos_usados = []
@@ -86,7 +87,13 @@ class Disco:
                     blocos_usados = pos+i
                 print("O processo " + str(pid) + " criou o arquivo " + nome + str(blocos_usados) + ".\n")
             if(codigo == 1):
-                print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")    
+                print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")   
+        else:
+            print("Operacao " + str(op_id) + "=> Falha")
+            print("O processo " + str(pid) + " nao exite.\n")
+        print('')
+        print(self.blocos)
+        print('')
 
     def imprime_disco(self):
         print(self.blocos)
