@@ -28,11 +28,14 @@ def despachante_init(caminho_proc, caminho_arq):
     preencher_processos(caminho_proc)
     loop_controle()
 
-    # TODO 
-    # Incluir isso aqui no meio da execucao dos processos
+    le_procs(caminho_proc)
     le_arqs(caminho_arq)
+    #loop_controle()
+    #executa_processos()
+
     disco.prepara_disco()
-    # disco.executa_operacoes()
+    disco.executa_operacoes()
+    disco.imprime_disco()
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
@@ -63,7 +66,7 @@ def preencher_processos(caminho):
 
     fh = open(caminho, 'r')    
     # Contador de IDs dos processos
-    pid = 1
+    pid = 0
 
     for linha in fh:
         linha = linha.replace(" ","").replace("\n", "")
@@ -133,11 +136,6 @@ def le_arqs(caminho):
     
     for linha in fh:
         disco.add_operacao(linha)
-
-
-
-#def executa_gerenciador_arqs(caminho_arq):
-
 
 
 # Imprime os dados de cada processo executado pelo dispachante
