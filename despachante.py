@@ -8,10 +8,12 @@ from memoria import Memoria
 from entrada_saida import Entrada_Saida
 from fila import Fila
 from disco import Disco
+from leitor import preparar_processos
+from leitor import preparar_disco
 
 
 # Fila geral de processos
-processos = []
+processos = list()
 
 memoria = Memoria()
 recurso = Entrada_Saida()
@@ -20,73 +22,37 @@ fila    = Fila()
 
 tempo = 0
 
-
 # Inicializa a execucao do SO
 def despachante_init(caminho_proc, caminho_arq):
-    # Lista representacao de processos no formato da entrada
-    # strings_proc = []
-    #preencher_processos(caminho_proc)
-    #loop_controle()
+    global processos
+    global disco
 
-    preencher_processos(caminho_proc)
-    le_arqs(caminho_arq)
-    loop_controle()
-    executa_processos()
+    processos = preparar_processos(caminho_proc)
+    executar_processos()
 
+    disco = preparar_disco(caminho_arq)
     disco.prepara_disco()
     disco.executa_operacoes(processos)
     disco.imprime_disco()
 
-# Le um arquivo texto e salva em uma lista de strings
-# onde cada string eh referente a uma linha do arquivo
-def loop_controle():
-    
-    #for i in range(0,len(processos)):
-    while (fila.existe_processos_para_executar()or len(processos) > 0):
-        
-        if((len(processos) > 0)):
-            while ((processos[0].tempo_init <= tempo)):
-                if(memoria.memoria_disponivel(processos[0])):
-                    fila.adiciona_em_fila(processos.pop(0))
-                else:
-                    processos.pop(0)
-                if(len(processos) == 0): break
+def executar_processos():
+    while (fila.existe_processos_para_executar() or existe_processo_para_entrar_em_execucao()):
+        adicionar_processos_nas_filas_de_execucao(tempo)
+        escalonar()
 
-        executa_processos()
-    #print(memoria.memoria_real)
+def existe_processo_para_entrar_em_execucao():
+    return len(processos) > 0
 
+def adicionar_processos_nas_filas_de_execucao(tempo_atual):
+    if ((len(processos) > 0)):
+        while ((processos[0].tempo_init <= tempo_atual)):
+            if (memoria.memoria_disponivel(processos[0])):
+                fila.adiciona_em_fila(processos.pop(0))
+            else:
+                processos.pop(0)
+            if (len(processos) == 0): break
 
-#def memoria_disponivel():
-#    return True
-
-
-# Popula a fila geral de processos com objetos do classe
-# Processo atraves dos dados lidos do arquivo txt
-def preencher_processos(caminho):
-
-    fh = open(caminho, 'r')    
-    # Contador de IDs dos processos
-    pid = 0
-
-    for linha in fh:
-        linha = linha.replace(" ","").replace("\n", "")
-        int_list = linha.split(',')
-
-        tempo_init = int(int_list[0])
-        prioridade = int(int_list[1])
-        tempo_cpu = int(int_list[2])
-        quant_mem = int(int_list[3])
-        impressora = int(int_list[4])
-        scanner = int(int_list[5])
-        modem = int(int_list[6])
-        sata = int(int_list[7])
-
-        proc = Processo(pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, sata)
-        pid += 1
-        processos.append(proc)
-        processos.sort(key=lambda x: x.tempo_init)
-
-def executa_processos():
+def escalonar():
     global tempo
 
     if (fila.existe_processo_real()):
@@ -121,23 +87,7 @@ def executa_usuario(proc, fila):
     if (proc.tempo_cpu == 0):
         memoria.libera_memoria_usuario(proc)
         fila.pop(0)
-
-def le_arqs(caminho):
-
-    fh = open(caminho, 'r')    
-    
-    tamanho = int(fh.readline())
-    seg_ocup = int(fh.readline())
-    disco.inicializa_disco(tamanho, seg_ocup)    
-
-    for i in range(2, seg_ocup+2):
-        linha = fh.readline()
-        disco.add_arquivo(linha)
-    
-    for linha in fh:
-        disco.add_operacao(linha)
-
-
+        
 # Imprime os dados de cada processo executado pelo dispachante
 # def imprime_processo(proc):
 #     print("Dispachante =>")
