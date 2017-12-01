@@ -79,3 +79,44 @@ class Fila:
     def existe_processo_usuario(self):
         return (len(self.processos_usuario3) != 0) or (len(self.processos_usuario2) != 0) or (
         len(self.processos_usuario3))
+
+
+    def mais_executado_fila1(self):
+        tempo_decorrido = 0
+
+        for i in range(0,len(self.processos_usuario1)):
+            if(self.processos_usuario1[i] > tempo_decorrido):
+                tempo_decorrido = self.processos_usuario1[i]
+                posicao = i
+        return posicao
+
+    def mais_executado_fila2(self):
+        tempo_decorrido = 0
+
+        for i in range(0,len(self.processos_usuario2)):
+            if(self.processos_usuario2[i] > tempo_decorrido):
+                tempo_decorrido = self.processos_usuario2[i]
+                posicao = i
+
+        return posicao
+
+    def menos_executado_fila2(self):
+        tempo_decorrido = processos_usuario2[0].tempo_decorrido
+
+        for i in range(0,len(self.processos_usuario2)):
+            if(self.processos_usuario2[i] < tempo_decorrido):
+                tempo_decorrido = self.processos_usuario2[i]
+                posicao = i
+
+        return posicao
+
+    def menos_executado_fila3(self):
+        tempo_decorrido = processos_usuario3[0].tempo_decorrido
+        
+        for i in range(0,len(self.processos_usuario3)):
+            if(self.processos_usuario3[i] < tempo_decorrido):
+                tempo_decorrido = self.processos_usuario3[i]
+                posicao = i
+
+        return posicao
+
