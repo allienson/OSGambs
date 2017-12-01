@@ -76,10 +76,10 @@ class Disco:
 
     def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, sucesso):
         if(sucesso == 0):
-            print("Operação " + str(op_id) + "=> Falha")
-            print("O processo " + str(pid) + " não pode criar o arquivo " + nome + " (falta de espcaço).\n")
+            print("Operacao " + str(op_id) + "=> Falha")
+            print("O processo " + str(pid) + " nao pode criar o arquivo " + nome + " (falta de espcaco).\n")
         else:
-            print("Operação " + str(op_id) + "=> Sucesso")
+            print("Operacao " + str(op_id) + "=> Sucesso")
             if(codigo == 0):
                 blocos_usados = []
                 for i in range(0, num_blocos):
