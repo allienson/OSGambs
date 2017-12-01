@@ -93,12 +93,18 @@ class Disco:
         else:
             print("Operacao " + str(op_id) + "=> Falha")
             print("O processo " + str(pid) + " nao exite.\n")
-        print('')
-        print(self.blocos)
-        print('')
 
     def imprime_disco(self):
-        print(self.blocos)
-        print('')
-        for op in self.operacoes:
-            print(op)
+        printf("%c", 201)
+        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 205)
+        printf("%c", 187)
+
+        printf("%c", 186)
+        for item in self.blocos:
+            printf(" %c ", item)
+        printf("%c", 186)
+
+        printf("%c", 200)
+        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 205)
+        printf("%c", 188)
+        
