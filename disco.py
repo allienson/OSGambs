@@ -68,11 +68,9 @@ class Disco:
                     for j in range(pos, i+1):
                         self.blocos[j] = nome
                     self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
-                    break
+                    return
                 
             self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
-                   
-
         else:
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == nome):    
