@@ -30,16 +30,14 @@ def despachante_init(caminho_proc, caminho_arq):
     # Lista representacao de processos no formato da entrada
     strings_proc = []
 
-    #le_arquivo(, strings_proc)
-    #prepara_fila_proc(caminho_proc)
+    le_procs(caminho_proc)
+    le_arqs(caminho_arq)
     #loop_controle()
     #executa_processos()
 
-    # TODO 
-    # Incluir isso aqui no meio da execução dos processos
-    le_arqs(caminho_arq)
     disco.prepara_disco()
     disco.executa_operacoes()
+    disco.imprime_disco()
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
@@ -82,14 +80,13 @@ def adiciona_em_fila(proc):
     processos_usuario2.sort(key=lambda x: x.tempo_init)
     processos_usuario3.sort(key=lambda x: x.tempo_init)
 
-
 # Popula a fila geral de processos com objetos do classe
 # Processo atraves dos dados lidos do arquivo txt
-def prepara_fila_proc(caminho):
+def le_procs(caminho):
 
     fh = open(caminho, 'r')    
     # Contador de IDs dos processos
-    pid = 1
+    pid = 0
 
     for linha in fh:
         linha = linha.replace(" ","").replace("\n", "")
@@ -159,11 +156,6 @@ def le_arqs(caminho):
     
     for linha in fh:
         disco.add_operacao(linha)
-
-
-
-#def executa_gerenciador_arqs(caminho_arq):
-
 
 
 # Imprime os dados de cada processo executado pelo dispachante

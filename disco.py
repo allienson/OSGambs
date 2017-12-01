@@ -13,20 +13,16 @@ class Disco:
         self.tamanho = tamanho
         self.seg_ocup = seg_ocup
 
-        print(self.tamanho, self.seg_ocup)
-
     def add_arquivo(self, linha):
         linha = linha.replace(" ", "").replace("\n", "")
         char_list = linha.split(',')
         self.arquivos.append(char_list)
-        #print(self.arquivos)
 
     def add_operacao(self, linha):
         linha = linha.replace(" ", "").replace("\n", "")
         char_list = linha.split(',')
         self.operacoes.append(char_list)
-        #print(self.operacoes)
-
+        
     def prepara_disco(self):
         for arq in self.arquivos:
             self.insere_arquivo(arq)
@@ -38,3 +34,62 @@ class Disco:
 
         for i in range(0, quant_blocos):
             self.blocos[i+inicial] = nome
+
+    def executa_operacoes(self):
+        op_id = 0
+
+        for op in self.operacoes:
+            op_id += 1
+            pid = int(op[0])
+            codigo = int(op[1])
+            nome = op[2]
+            if(codigo == 0):
+                num_blocos = int(op[3])
+            else:
+                num_blocos = 0
+            self.operacao(pid, codigo, nome, num_blocos, op_id)
+                
+
+    def operacao(self, pid, codigo, nome, num_blocos, op_id):
+        count = 0
+        pos = 0
+        
+        if(codigo == 0):    
+            for i in range(0, len(self.blocos)):
+                if(self.blocos[i] == '0'):
+                    if(count == 0):
+                        pos = i
+                    count += 1
+                else:
+                    count = 0
+            if(num_blocos == count-1):
+                for i in range(0, num_blocos):
+                    self.blocos[pos+i] = nome
+                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+            else:
+                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
+        else:
+            for i in range(0, len(self.blocos)):
+                if(self.blocos[i] == nome):    
+                    self.blocos[i] = '0'
+            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+
+    def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, sucesso):
+        if(sucesso == 0):
+            print("Operação " + str(op_id) + "=> Falha")
+            print("O processo " + str(pid) + " não pode criar o arquivo " + nome + " (falta de espcaço).\n")
+        else:
+            print("Operação " + str(op_id) + "=> Sucesso")
+            if(codigo == 0):
+                blocos_usados = []
+                for i in range(0, num_blocos):
+                    blocos_usados = pos+i
+                print("O processo " + str(pid) + " criou o arquivo " + nome + str(blocos_usados) + ".\n")
+            if(codigo == 1):
+                print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")    
+
+    def imprime_disco(self):
+        print(self.blocos)
+        print('')
+        for op in self.operacoes:
+            print(op)
