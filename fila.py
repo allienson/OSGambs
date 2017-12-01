@@ -41,3 +41,5 @@ class Fila:
         return len(self.processos_usuario2) != 0
     def existe_processo_3(self):
         return len(self.processos_usuario3) != 0
+    def existe_processo_usuario(self):
+        return (len(self.processos_usuario3) != 0) or (len(self.processos_usuario2) != 0) or (len(self.processos_usuario3))
