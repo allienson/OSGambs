@@ -34,7 +34,7 @@ def despachante_init(caminho_proc, caminho_arq):
     executa_processos()
 
     disco.prepara_disco()
-    disco.executa_operacoes(processos)
+    disco.executa_operacoes(fila.todos_processos)
     disco.imprime_disco()
 
 # Le um arquivo texto e salva em uma lista de strings
@@ -104,7 +104,7 @@ def executa_real(proc):
     global tempo
     for i in range(0, proc.tempo_cpu):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
-        time.sleep(1)
+        #time.sleep(1)
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
     fila.processos_real.pop(0)
@@ -116,7 +116,7 @@ def executa_usuario(proc, fila):
     proc.tempo_decorrido += 1
 
     print("    P" + str(proc.pid) + " instrucao " + str(proc.tempo_decorrido))
-    time.sleep(1)
+    #time.sleep(1)
 
     if (proc.tempo_cpu == 0):
         memoria.libera_memoria_usuario(proc)

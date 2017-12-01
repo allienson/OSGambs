@@ -6,7 +6,7 @@
 class Processo:
 	
 	tempo_decorrido = 0
-
+	arq_criados = []
 
 
 	def __init__(self, pid, tempo_init, prioridade, tempo_cpu, quant_mem, impressora, scanner, modem, sata):
