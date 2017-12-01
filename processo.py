@@ -14,7 +14,6 @@ class Processo:
 		self.tempo_init = tempo_init
 		self.prioridade = prioridade
 		self.tempo_cpu  = tempo_cpu
-		# self.offset     = offset # esse valor a gente vai ter que calcular a partir do gerenciador de arquivos eu acho
 		self.quant_mem  = quant_mem
 		self.impressora = impressora
 		self.scanner    = scanner

@@ -103,24 +103,36 @@ def escalonar():
             return
     tempo += 1
 
-
 def executa_real(proc):
     global tempo
+    
+    imprime_processo_info(proc)
+    print("Process " + str(proc.pid) + "=> STARTED")
+
     for i in range(0, proc.tempo_cpu):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
+    print("\tP" + str(proc.pid) + " return SIGINT")
 
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
 
 def executa_usuario(proc, fila,pos):
     global tempo
+    
+    if(proc.tempo_decorrido == 0):        
+        imprime_processo_info(proc)
+
     tempo += 1
     proc.tempo_decorrido += 1
 
-    print("    P" + str(proc.pid) + " instrucao " + str(proc.tempo_decorrido))
+    #if()
+    print('')
+    #print("Process " + str(proc.pid) + "=>")
+    print("\tP" + str(proc.pid) + " instruction " + str(proc.tempo_decorrido))
 
 
     if (proc.tempo_cpu == proc.tempo_decorrido):
+        print("\tP" + str(proc.pid) + " return SIGINT")
         recurso.liberar_recurso(proc)
         memoria.libera_memoria_usuario(proc)
         fila.pop(pos)
@@ -130,20 +142,15 @@ def executa_usuario(proc, fila,pos):
 
         
 # Imprime os dados de cada processo executado pelo dispachante
-# def imprime_processo(proc):
-#     print("Dispachante =>")
-#     print("    PID:        " + str(proc.pid))
-#     print("    prioridade: " + str(proc.prioridade))
-#     # print("    offset:   " + str(proc.offset))
-#     print("    blocos:     " + str(proc.quant_mem))
-#     print("    impressora: " + str(proc.impressora))
-#     print("    scanner:    " + str(proc.scanner))
-#     print("    modem:      " + str(proc.modem))
-#     print("    disco:      " + str(proc.disco))
-#     print("\n")
-#  str(proc.quant_mem))
-#     print("    impressora: " + str(proc.impressora))
-#     print("    scanner:    " + str(proc.scanner))
-#     print("    modem:      " + str(proc.modem))
-#     print("    disco:      " + str(proc.disco))
-#     print("\n")
+def imprime_processo_info(proc):
+    print('')
+    print("Process " + str(proc.pid) + "=> STARTED")   
+    print("    PID:        " + str(proc.pid))
+    print("    prioridade: " + str(proc.prioridade))
+    print("    offset:     " + str(proc.inicio_memoria))
+    print("    blocos:     " + str(proc.quant_mem))
+    print("    impressora: " + str(proc.impressora))
+    print("    scanner:    " + str(proc.scanner))
+    print("    modem:      " + str(proc.modem))
+    print("    sata:       " + str(proc.sata))
+    print('')

@@ -40,8 +40,9 @@ class Disco:
     def executa_operacoes(self, processos):
         op_id = 0
 
-        print('')
+        print('\n\n')
         print("Sistema de arquivos =>")
+        print('')
 
         for op in self.operacoes:
             op_id += 1
@@ -120,7 +121,7 @@ class Disco:
             print("O processo " + str(pid) + " nao possui autorizacao para essa operacao.\n")
 
     def imprime_disco(self):
-        
+        print('')
         tab = tt.Texttable()
         tab.add_row(self.blocos)
         print(tab.draw())
