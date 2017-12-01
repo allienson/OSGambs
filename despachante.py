@@ -1,26 +1,22 @@
-###################
-# Modulo de Filas #
-###################
+#########################
+# Modulo de Despachante #
+#########################
 
 from processo import Processo
 import time
 from memoria import Memoria
 from entrada_saida import Entrada_Saida
+from fila import Fila
 from disco import Disco
 
 
 # Fila geral de processos
 processos = []
-# Fila de processos de tempo real
-processos_real = []
-# Fila de processos de usuario
-processos_usuario1 = []
-processos_usuario2 = []
-processos_usuario3 = []
 
 memoria = Memoria()
 recurso = Entrada_Saida()
 disco   = Disco()
+fila    = Fila()
 
 tempo = 0
 
@@ -28,64 +24,42 @@ tempo = 0
 # Inicializa a execucao do SO
 def despachante_init(caminho_proc, caminho_arq):
     # Lista representacao de processos no formato da entrada
-    strings_proc = []
-
-    #le_arquivo(, strings_proc)
-    #prepara_fila_proc(caminho_proc)
-    #loop_controle()
-    #executa_processos()
+    # strings_proc = []
+    preencher_processos(caminho_proc)
+    loop_controle()
 
     # TODO 
-    # Incluir isso aqui no meio da execução dos processos
+    # Incluir isso aqui no meio da execucao dos processos
     le_arqs(caminho_arq)
     disco.prepara_disco()
-    disco.executa_operacoes()
+    # disco.executa_operacoes()
 
 # Le um arquivo texto e salva em uma lista de strings
 # onde cada string eh referente a uma linha do arquivo
 def loop_controle():
     
     #for i in range(0,len(processos)):
-    while ((len(processos_real) != 0) or (len(processos) >0) or (len(processos_usuario1) >0) or (len(processos_usuario2) >0) or (len(processos_usuario3) >0)):
+    while (fila.existe_processos_para_executar()or len(processos) > 0):
         
         if((len(processos) > 0)):
             while ((processos[0].tempo_init <= tempo)):
                 if(memoria.memoria_disponivel(processos[0])):
-                    adiciona_em_fila(processos.pop(0))
+                    fila.adiciona_em_fila(processos.pop(0))
                 else:
                     processos.pop(0)
-
                 if(len(processos) == 0): break
 
         executa_processos()
     #print(memoria.memoria_real)
 
+
 #def memoria_disponivel():
 #    return True
-
-def adiciona_em_fila(proc):
-
-    if (proc.prioridade == 0):
-        processos_real.append(proc)
-    elif (proc.prioridade == 1):
-        processos_usuario1.append(proc)
-    elif (proc.prioridade == 2):
-        processos_usuario2.append(proc)
-    elif (proc.prioridade == 3):
-        processos_usuario3.append(proc)
-    else:
-        print("Prioridade inválida")
-        exit(0)
-
-    processos_real.sort(key=lambda x: x.tempo_init)  # Ordena os processos por ordem de chegada
-    processos_usuario1.sort(key=lambda x: x.tempo_init)
-    processos_usuario2.sort(key=lambda x: x.tempo_init)
-    processos_usuario3.sort(key=lambda x: x.tempo_init)
 
 
 # Popula a fila geral de processos com objetos do classe
 # Processo atraves dos dados lidos do arquivo txt
-def prepara_fila_proc(caminho):
+def preencher_processos(caminho):
 
     fh = open(caminho, 'r')    
     # Contador de IDs dos processos
@@ -112,14 +86,14 @@ def prepara_fila_proc(caminho):
 def executa_processos():
     global tempo
 
-    if ((len(processos_real) != 0)):
-        executa_real(processos_real[0])
-    elif ((len(processos_usuario1) != 0) and recurso.alocar_recurso(processos_usuario1[0])):
-        executa_usuario(processos_usuario1[0], processos_usuario1)
-    elif ((len(processos_usuario2) != 0) ):
-        executa_usuario(processos_usuario2[0], processos_usuario2)
-    elif ((len(processos_usuario3) != 0)):
-        executa_usuario(processos_usuario3[0], processos_usuario3)
+    if (fila.existe_processo_real()):
+        executa_real(fila.processos_real[0])
+    elif (fila.existe_processo_1() and recurso.alocar_recurso(fila.processos_usuario1[0])):
+        executa_usuario(fila.processos_usuario1[0], fila.processos_usuario1)
+    elif (fila.existe_processo_2()):
+        executa_usuario(fila.processos_usuario2[0], fila.processos_usuario2)
+    elif (fila.existe_processo_3()):
+        executa_usuario(fila.processos_usuario3[0], fila.processos_usuario3)
     else:
         tempo += 1
 
@@ -130,7 +104,7 @@ def executa_real(proc):
         time.sleep(1)
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
-    processos_real.pop(0)
+    fila.processos_real.pop(0)
 
 def executa_usuario(proc, fila):
     global tempo
