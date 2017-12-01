@@ -1,3 +1,5 @@
+import texttable as tt
+
 class Disco:
     blocos = []
     arquivos = []
@@ -38,6 +40,9 @@ class Disco:
     def executa_operacoes(self, processos):
         op_id = 0
 
+        print('')
+        print("Sistema de arquivos =>")
+
         for op in self.operacoes:
             op_id += 1
             pid = int(op[0])
@@ -67,15 +72,31 @@ class Disco:
                     pos = i - num_blocos + 1
                     for j in range(pos, i+1):
                         self.blocos[j] = nome
+                    proc = [proc for proc in processos if proc.pid == pid]
+                    proc[0].arq_criados.append(nome)
                     self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
                     return
                 
             self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
+            return
         else:
-            for i in range(0, len(self.blocos)):
-                if(self.blocos[i] == nome):    
-                    self.blocos[i] = '0'
-            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+            proc = [proc for proc in processos if proc.pid == pid]
+            if (proc[0].prioridade != 0):
+                if nome in proc[0].arq_criados:
+                    for i in range(0, len(self.blocos)):
+                        if(self.blocos[i] == nome):    
+                            self.blocos[i] = '0'
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                    return
+                else:
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=3)
+                    return
+            else:
+                for i in range(0, len(self.blocos)):
+                    if(self.blocos[i] == nome):    
+                        self.blocos[i] = '0'
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                    return
 
     def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, sucesso):
         if(sucesso == 0):
@@ -90,21 +111,15 @@ class Disco:
                 print("O processo " + str(pid) + " criou o arquivo " + nome + ".\n")
             if(codigo == 1):
                 print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")   
-        else:
+        elif(sucesso == 2):
             print("Operacao " + str(op_id) + "=> Falha")
             print("O processo " + str(pid) + " nao exite.\n")
+        else:
+            print("Operacao " + str(op_id) + "=> Falha")
+            print("O processo " + str(pid) + " nao possui autorizacao para essa operacao.\n")
 
     def imprime_disco(self):
-        printf("%c", 201)
-        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 205)
-        printf("%c", 187)
-
-        printf("%c", 186)
-        for item in self.blocos:
-            printf(" %c ", item)
-        printf("%c", 186)
-
-        printf("%c", 200)
-        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", 205)
-        printf("%c", 188)
         
+        tab = tt.Texttable()
+        tab.add_row(self.blocos)
+        print(tab.draw())
