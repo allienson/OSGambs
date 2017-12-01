@@ -30,8 +30,8 @@ def despachante_init(caminho_proc, caminho_arq):
 
     preencher_processos(caminho_proc)
     le_arqs(caminho_arq)
-    #loop_controle()
-    #executa_processos()
+    loop_controle()
+    executa_processos()
 
     disco.prepara_disco()
     disco.executa_operacoes(processos)
