@@ -1,2 +1,6 @@
 .idea/
 __pycache__/
+despachante.pyc
+disco.pyc
+leitor.pyc
+processo.pyc
