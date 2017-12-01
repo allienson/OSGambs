@@ -41,6 +41,22 @@ class Fila:
         self.processos_usuario2.sort(key=lambda x: x.tempo_init)
         self.processos_usuario3.sort(key=lambda x: x.tempo_init)
 
+    def aging_process(self):
+        if(self.posicoes_livres_na_fila1(len(self.processos_usuario2))):
+            self.processos_usuario1.extend(self.processos_usuario2)
+            self.processos_usuario2[:] = []
+        if(self.posicoes_livres_na_fila2(len(self.processos_usuario3))):
+            self.processos_usuario2.extend(self.processos_usuario3)
+            self.processos_usuario3[:] = []
+
+    def posicoes_livres_na_fila1(self, posicoes_necessarias):
+        posicoes_livres = 1000 - len(self.processos_usuario1)
+        return posicoes_necessarias <= posicoes_livres
+
+    def posicoes_livres_na_fila2(self, posicoes_necessarias):
+        posicoes_livres = 1000 - len(self.processos_usuario2)
+        return posicoes_necessarias <= posicoes_livres
+
     def err_fila(self):
         print("Pilha cheia")
 
