@@ -61,13 +61,10 @@ class Disco:
                     count += 1
                 else:
                     count = 0
-                print(self.blocos)
-                print(count)
-                input()
                 if(num_blocos == count):
-                    pos = count-num_blocos+i+1
-                    for i in range(0, num_blocos):
-                        self.blocos[pos] = nome
+                    pos = i - num_blocos + 1
+                    for j in range(pos, i+1):
+                        self.blocos[j] = nome
                     self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
                     break
                 
