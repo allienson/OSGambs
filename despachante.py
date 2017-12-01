@@ -56,8 +56,14 @@ def escalonar():
     global tempo
 
     if (fila.existe_processo_real()):
-        executa_real(fila.processos_real[0])
-    elif (fila.existe_processo_1() and recurso.alocar_recurso(fila.processos_usuario1[0])):
+        for i in range(0,len(fila.processos_real)):
+            if(fila.processos_real[i].tempo_decorrido == 0):
+                if(memoria.memoria_disponivel(fila.processos_real[i])):
+                    executa_real(fila.processos_real[i],i)
+            else:
+                executa_real(fila.processos_real[i],i)
+
+    elif (fila.existe_processo_1()):
         executa_usuario(fila.processos_usuario1[0], fila.processos_usuario1)
     elif (fila.existe_processo_2()):
         executa_usuario(fila.processos_usuario2[0], fila.processos_usuario2)
@@ -66,25 +72,24 @@ def escalonar():
     else:
         tempo += 1
 
-def executa_real(proc):
+def executa_real(proc,posicao):
     global tempo
     for i in range(0, proc.tempo_cpu):
         print("    P" + str(proc.pid) + " instrucao " + str(i + 1))
         #time.sleep(1)
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
-    fila.processos_real.pop(0)
+    fila.processos_real.pop(posicao)
 
 def executa_usuario(proc, fila):
     global tempo
     tempo += 1
-    proc.tempo_cpu -= 1
     proc.tempo_decorrido += 1
 
     print("    P" + str(proc.pid) + " instrucao " + str(proc.tempo_decorrido))
     #time.sleep(1)
 
-    if (proc.tempo_cpu == 0):
+    if (proc.tempo_cpu == proc.tempo_decorrido):
         memoria.libera_memoria_usuario(proc)
         fila.pop(0)
         
