@@ -53,22 +53,27 @@ class Disco:
         count = 0
         pos = 0
         
-        if(any(proc.pid == pid for proc in processos)):
+        if(any(proc.pid == pid for proc in processos) == False):
             self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=2)
         elif(codigo == 0):    
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == '0'):
-                    if(count == 0):
-                        pos = i
                     count += 1
                 else:
                     count = 0
-            if(num_blocos == count-1):
-                for i in range(0, num_blocos):
-                    self.blocos[pos+i] = nome
-                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
-            else:
-                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
+                print(self.blocos)
+                print(count)
+                input()
+                if(num_blocos == count):
+                    pos = count-num_blocos+i+1
+                    for i in range(0, num_blocos):
+                        self.blocos[pos] = nome
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                    break
+                
+            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
+                   
+
         else:
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == nome):    
