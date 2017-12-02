@@ -80,43 +80,47 @@ class Fila:
         return (len(self.processos_usuario3) != 0) or (len(self.processos_usuario2) != 0) or (
         len(self.processos_usuario3))
 
+    def aging(self):
+        if(len(self.processos_usuario3) > 0):
+            if(len(self.processos_usuario2) > 0):
+                self.swap_filas(self.processos_usuario2,self.processos_usuario3)
+            else:
+                processo = self.processos_usuario3.pop(self.menos_executado_fila(self.processos_usuario3))
+                self.processos_usuario2.append(processo)
 
-    def mais_executado_fila1(self):
+        if(len(self.processos_usuario2) > 0):
+            if(len(self.processos_usuario1) > 0):
+                self.swap_filas(self.processos_usuario1,self.processos_usuario2)
+            else:
+                processo2 = self.processos_usuario2.pop(self.menos_executado_fila(self.processos_usuario2))
+                self.processos_usuario1.append(processo2)
+
+
+    def swap_filas(self,fila1,fila2):
+        processo1 = fila1.pop(self.mais_executado_fila(fila1))
+        processo2 = fila2.pop(self.menos_executado_fila(fila2))
+        fila1.append(processo2)
+        fila2.append(processo1)
+
+
+    def mais_executado_fila(self,fila):
         tempo_decorrido = 0
-
-        for i in range(0,len(self.processos_usuario1)):
-            if(self.processos_usuario1[i] > tempo_decorrido):
-                tempo_decorrido = self.processos_usuario1[i]
+        posicao = 0
+        for i in range(0,len(fila)):
+            if(fila[i].tempo_decorrido > tempo_decorrido):
+                tempo_decorrido = fila[i]
                 posicao = i
         return posicao
 
-    def mais_executado_fila2(self):
-        tempo_decorrido = 0
 
-        for i in range(0,len(self.processos_usuario2)):
-            if(self.processos_usuario2[i] > tempo_decorrido):
-                tempo_decorrido = self.processos_usuario2[i]
-                posicao = i
-
-        return posicao
-
-    def menos_executado_fila2(self):
-        tempo_decorrido = processos_usuario2[0].tempo_decorrido
-
-        for i in range(0,len(self.processos_usuario2)):
-            if(self.processos_usuario2[i] < tempo_decorrido):
-                tempo_decorrido = self.processos_usuario2[i]
+    def menos_executado_fila(self,fila):
+        tempo_decorrido = fila[0].tempo_decorrido
+        posicao = 0
+        for i in range(0,len(fila)):
+            if(fila[i].tempo_decorrido < tempo_decorrido):
+                tempo_decorrido = fila[i]
                 posicao = i
 
         return posicao
 
-    def menos_executado_fila3(self):
-        tempo_decorrido = processos_usuario3[0].tempo_decorrido
-        
-        for i in range(0,len(self.processos_usuario3)):
-            if(self.processos_usuario3[i] < tempo_decorrido):
-                tempo_decorrido = self.processos_usuario3[i]
-                posicao = i
-
-        return posicao
 

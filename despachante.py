@@ -21,6 +21,7 @@ disco   = Disco()
 fila    = Fila()
 
 tempo = 0
+tempo_aging = 0
 
 # Inicializa a execucao do SO
 def despachante_init(caminho_proc, caminho_arq):
@@ -36,9 +37,14 @@ def despachante_init(caminho_proc, caminho_arq):
     disco.imprime_disco()
 
 def executar_processos():
+    tempo_aging = 0
     while (fila.existe_processos_para_executar() or existe_processo_para_entrar_em_execucao()):
         adicionar_processos_nas_filas_de_execucao(tempo)
         escalonar()
+        tempo_aging += 1
+        if(tempo_aging == 10):
+            tempo_aging = 0
+            fila.aging()
 
 def existe_processo_para_entrar_em_execucao():
     return len(processos) > 0

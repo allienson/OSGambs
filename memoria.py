@@ -30,7 +30,7 @@ class Memoria:
 					for j in range(processo.inicio_memoria ,i+1):
 						self.memoria_real[j] = 1
 					return True
-			print("Nao exite espaco suficiente na memoria de tempo real")
+			#print("Nao exite espaco suficiente na memoria de tempo real")
 			return False
 
 	def busca_memoria_usuario(self,processo):
@@ -45,7 +45,7 @@ class Memoria:
 					for j in range(processo.inicio_memoria ,i+1):
 						self.memoria_usuario[j] = 1
 					return True
-			print("Nao exite espaco suficiente na memoria de usuario")
+			#print("Nao exite espaco suficiente na memoria de usuario")
 			return False
 
 	def libera_memoria(self, processo):
