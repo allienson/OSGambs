@@ -64,29 +64,37 @@ def adicionar_processos_nas_filas_de_execucao(tempo_atual):
 def escalonar():
     global tempo
 
+    if(tenta_escalonar_processo_real()):
+        return True
+    elif(tenta_escalonar_processo_usuario()):
+        return True
+    else:
+        tempo += 1
+
+def tenta_escalonar_processo_real():
     #testa fila real
     for i in range(0,len(fila.processos_real)):
         if(fila.processos_real[i].tempo_decorrido == 0):
             if(memoria.memoria_disponivel(fila.processos_real[i])):
                 executa_real(fila.processos_real.pop(i))
-                return
+                return True
         else:
             executa_real(fila.processos_real.pop(i))
-            return
+            return True
+        return False
 
+def tenta_escalonar_processo_usuario():
     #testa a fila de prioridade 1
     for i in range(0,len(fila.processos_usuario1)):
         if(fila.processos_usuario1[i].tempo_decorrido == 0):
             if (recurso.recursos_estao_disponiveis(fila.processos_usuario1[i])):
                 if(memoria.memoria_disponivel(fila.processos_usuario1[i])):
-                
-
                     recurso.alocar_recurso(fila.processos_usuario1[i])
                     executa_usuario(fila.processos_usuario1[i],fila.processos_usuario1,i)
-                    return
+                    return True
         else:
             executa_usuario(fila.processos_usuario1[i],fila.processos_usuario1,i)
-            return
+            return True
 
     #testa a fila de prioridade 2
     for i in range(0,len(fila.processos_usuario2)):
@@ -96,24 +104,23 @@ def escalonar():
 
                     recurso.alocar_recurso(fila.processos_usuario2[i])
                     executa_usuario(fila.processos_usuario2[i],fila.processos_usuario2,i)
-                    return
+                    return True
         else:
             executa_usuario(fila.processos_usuario2[i],fila.processos_usuario2,i)
-            return
+            return True
 
     #testa a fila de prioridade 3
     for i in range(0,len(fila.processos_usuario3)):
         if(fila.processos_usuario3[i].tempo_decorrido == 0):
             if (recurso.recursos_estao_disponiveis(fila.processos_usuario3[i])):
                 if(memoria.memoria_disponivel(fila.processos_usuario3[i])):
-
                     recurso.alocar_recurso(fila.processos_usuario3[i])
                     executa_usuario(fila.processos_usuario3[i],fila.processos_usuario3,i)
-                    return
+                    return True
         else:
             executa_usuario(fila.processos_usuario3[i],fila.processos_usuario3,i)
-            return
-    tempo += 1
+            return True
+
 
 def executa_real(proc):
     global tempo
