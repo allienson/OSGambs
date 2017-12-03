@@ -1,16 +1,25 @@
 class Memoria:
 
+	USER_MEM_SIZE = 960
+	REAL_MEM_SIZE = 64
+
 	def  __init__(self):
 		self.memoria_real =[]
 		self.memoria_usuario = []
 		self.inicializa_memoria()
 
 	def inicializa_memoria(self):
-		for i in range(0,64):
+		for i in range(0,self.REAL_MEM_SIZE):
 			self.memoria_real.append(0)
 
-		for i in range(0,960):
+		for i in range(0,self.USER_MEM_SIZE):
 			self.memoria_usuario.append(0)
+
+	def processo_cabe_na_memoria(self,processo):
+		if (processo.prioridade == 0):
+			return processo.quant_mem <= self.REAL_MEM_SIZE
+		else:
+			return processo.quant_mem <= self.USER_MEM_SIZE
 
 	def memoria_disponivel(self,processo):
 	    if(processo.prioridade == 0):

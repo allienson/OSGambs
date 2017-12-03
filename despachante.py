@@ -52,7 +52,9 @@ def existe_processo_para_entrar_em_execucao():
 def adicionar_processos_nas_filas_de_execucao(tempo_atual):
     if ((len(processos) > 0)):
         while ((processos[0].tempo_init <= tempo_atual)):
-            fila.adiciona_em_fila(processos.pop(0))
+            proc = processos.pop(0)
+            if memoria.processo_cabe_na_memoria(proc):
+                fila.adiciona_em_fila(proc)
             if (len(processos) == 0): break
 
 def escalonar():
