@@ -55,6 +55,8 @@ def adicionar_processos_nas_filas_de_execucao(tempo_atual):
             proc = processos.pop(0)
             if memoria.processo_cabe_na_memoria(proc):
                 fila.adiciona_em_fila(proc)
+            else:
+                print("O processo "+str(proc.pid)+" exige mais memoria do que o sistema tem disponivel")
             if (len(processos) == 0): break
 
 def escalonar():
