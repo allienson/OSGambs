@@ -60,7 +60,7 @@ class Disco:
         pos = 0
 
         if(any(proc.pid == pid for proc in processos) == False):
-            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=2)
+            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=0, sucesso=2)
         elif(codigo == 0):    
             for i in range(0, len(self.blocos)):
                 if(self.blocos[i] == '0'):
@@ -76,10 +76,10 @@ class Disco:
                     for k in range(0, len(processos)): 
                         if processos[k].pid == pid-1:
                             processos[k].arq_criados.append(nome)                    
-                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=j, sucesso=1)
                     return
                 
-            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=0)
+            self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=0, sucesso=0)
             return
         else:
             proc = [proc for proc in processos if proc.pid == pid]
@@ -88,19 +88,19 @@ class Disco:
                     for i in range(0, len(self.blocos)):
                         if(self.blocos[i] == nome):    
                             self.blocos[i] = '0'
-                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=0, sucesso=1)
                     return
                 else:
-                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=3)
+                    self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=0, sucesso=3)
                     return
             else:
                 for i in range(0, len(self.blocos)):
                     if(self.blocos[i] == nome):    
                         self.blocos[i] = '0'
-                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, sucesso=1)
+                self.imprime_operacao(op_id, pid, codigo, nome, num_blocos, pos, pos_final=0, sucesso=1)
                 return
 
-    def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, sucesso):
+    def imprime_operacao(self, op_id, pid, codigo, nome, num_blocos, pos, pos_final, sucesso):
         if(sucesso == 0):
             print("Operacao " + str(op_id) + "=> Falha")
             print("O processo " + str(pid) + " nao pode criar o arquivo " + nome + " (falta de espcaco).\n")
@@ -110,7 +110,7 @@ class Disco:
                 blocos_usados = []
                 for i in range(0, num_blocos):
                     blocos_usados = pos+i
-                print("O processo " + str(pid) + " criou o arquivo " + nome + ".\n")
+                print("O processo " + str(pid) + " criou o arquivo " + nome + " (blocos de" + str(pos) + " a " + str(pos_final) + ").\n")
             if(codigo == 1):
                 print("O processo " + str(pid) + " deletou o arquivo " + nome + ".\n")   
         elif(sucesso == 2):
