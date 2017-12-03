@@ -22,6 +22,7 @@ fila    = Fila()
 
 tempo = 0
 tempo_aging = 0
+last_pid = -1
 
 # Inicializa a execucao do SO
 def despachante_init(caminho_proc, caminho_arq):
@@ -122,8 +123,9 @@ def executa_real(proc):
     memoria.libera_memoria_real(proc)
     tempo += proc.tempo_cpu
 
-def executa_usuario(proc, fila,pos):
+def executa_usuario(proc, fila, pos):
     global tempo
+    global last_pid
     
     if(proc.tempo_decorrido == 0):        
         imprime_processo_info(proc)
@@ -131,11 +133,13 @@ def executa_usuario(proc, fila,pos):
     tempo += 1
     proc.tempo_decorrido += 1
 
-    #if()
-    print('')
-    #print("Process " + str(proc.pid) + "=>")
-    print("\tP" + str(proc.pid) + " instruction " + str(proc.tempo_decorrido))
+    if(last_pid == proc.pid):
+        print("\tP" + str(proc.pid) + " instruction " + str(proc.tempo_decorrido))
+    else:
+        print("\nProcess " + str(proc.pid) + " =>")
+        print("\tP" + str(proc.pid) + " instruction " + str(proc.tempo_decorrido))
 
+    last_pid = proc.pid
 
     if (proc.tempo_cpu == proc.tempo_decorrido):
         print("\tP" + str(proc.pid) + " return SIGINT")
@@ -145,7 +149,6 @@ def executa_usuario(proc, fila,pos):
         return
 
     fila.append(fila.pop(pos))
-
         
 # Imprime os dados de cada processo executado pelo dispachante
 def imprime_processo_info(proc):
@@ -153,10 +156,12 @@ def imprime_processo_info(proc):
     print("Process " + str(proc.pid) + "=> STARTED")   
     print("    PID:        " + str(proc.pid))
     print("    prioridade: " + str(proc.prioridade))
-    print("    offset:     " + str(proc.inicio_memoria))
+    if(proc.prioridade != 0):
+        print("    offset:     " + str(proc.inicio_memoria + 64))
+    else:
+        print("    offset:     " + str(proc.inicio_memoria))
     print("    blocos:     " + str(proc.quant_mem))
     print("    impressora: " + str(proc.impressora))
     print("    scanner:    " + str(proc.scanner))
     print("    modem:      " + str(proc.modem))
     print("    sata:       " + str(proc.sata))
-    print('')
