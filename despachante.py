@@ -42,7 +42,7 @@ def executar_processos():
         adicionar_processos_nas_filas_de_execucao(tempo)
         escalonar()
         tempo_aging += 1
-        if(tempo_aging == 10):
+        if(tempo_aging == 20):
             tempo_aging = 0
             fila.aging()
 

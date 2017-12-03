@@ -99,6 +99,8 @@ class Fila:
     def swap_filas(self,fila1,fila2):
         processo1 = fila1.pop(self.mais_executado_fila(fila1))
         processo2 = fila2.pop(self.menos_executado_fila(fila2))
+        processo1.tempo_cpu = processo1.tempo_cpu - (processo1.tempo_decorrido - 1)
+        processo1.tempo_decorrido = 1
         fila1.append(processo2)
         fila2.append(processo1)
 
