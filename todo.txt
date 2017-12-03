@@ -1,3 +1,0 @@
-Lembrar de somar 64 quando for printar o offset dos processos de usuario
-
-criar funcao que testa se o processo nao usa mais memoria do que o SO de fato tem
